@@ -46,6 +46,7 @@ new ResizeObserver(pcSize).observe(pc);
 fetch('models.txt').then(r=>r.text()).then(t=>{const bs=atob(t.trim()),buf=new ArrayBuffer(bs.length),u8=new Uint8Array(buf);for(let i=0;i<bs.length;i++)u8[i]=bs.charCodeAt(i);
   let o=0;MODELS.forEach(m=>{m.p=new Float32Array(NP*3);m.n=new Float32Array(NP*3);const a=new Int16Array(buf,o,NP*3);o+=NP*6;const n=new Int8Array(buf,o,NP*3);o+=NP*3;
     for(let i=0;i<NP*3;i++){m.p[i]=a[i]/32000;m.n[i]=n[i]/127}});
+  [MODELS[0],MODELS[3]]=[MODELS[3],MODELS[0]];
   ready=true;pos.set(MODELS[0].p);nor.set(MODELS[0].n);select(0,false);
   if(!RM){for(let i=0;i<NP*3;i++)fromP[i]=(Math.random()-.5)*2.6;fromN.set(MODELS[0].n);fFrom=MODELS[0].f;mt0=performance.now()}}).catch(()=>{});
 const spec=document.getElementById('spec');
