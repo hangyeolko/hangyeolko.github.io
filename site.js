@@ -271,3 +271,23 @@ function route(){
   else{const el=document.getElementById(h);if(el)requestAnimationFrame(()=>el.scrollIntoView({block:'start'}))}
 }
 addEventListener('hashchange',route);route();
+
+/* ----- language toggle (ui text only; project titles stay as is) ----- */
+(()=>{
+const KO={'3d creation':'3D 작업','fashion':'패션','contact':'연락처','3d fashion & object':'3D · 패션 · 오브제','view project':'프로젝트 보기','index':'목차','close':'닫기','next':'다음','copy':'복사','copied':'복사됨','mail':'메일','instagram':'인스타그램',
+'view in 3d':'3D로 보기','loading 3d model':'3D 모델 불러오는 중','3d view needs webgl2':'이 브라우저에서는 3D 보기를 지원하지 않습니다',
+'drag to rotate · scroll to zoom':'드래그해서 돌리기 · 스크롤해서 확대',
+'k-pop artist art pieces':'K-pop 아티스트 아트피스','custom order':'주문 제작','merchandise':'머천다이즈','graduation work':'졸업 작품','apparel vendor':'의류 벤더','designer brand':'디자이너 브랜드','graduation fashion show':'졸업 패션쇼',
+'“made my night” performance film':'“Made My Night” 퍼포먼스 필름','“moon” m/v':'“MOON” 뮤직비디오','brand collaboration':'브랜드 협업','for voguing dancer (juju)':'보깅 댄서 JUJU 의뢰','musician (vp)':'뮤지션 VP 의뢰',
+'personal brand':'개인 브랜드','3d armor':'3D 갑옷','personal studies':'개인 작업','3d garment r&d':'3D 의상 R&D','gown':'드레스','body suit':'바디 슈트',
+'for vp':'VP 의뢰','for babymonster':'베이비몬스터 작업','for le sserafim':'르세라핌 작업',
+'3d modeling & printing for artists, brands and fashion — art pieces, accessories, props and clo 3d garments. open to commissions worldwide — korean / english.':'아티스트, 브랜드, 패션을 위한 3D 모델링과 3D 프린팅 — 아트피스, 액세서리, 소품, CLO 3D 의상. 해외 의뢰도 받습니다 (한국어 / 영어).'};
+let LANG='en';try{LANG=localStorage.getItem('lang')||((navigator.language||'').toLowerCase().startsWith('ko')?'ko':'en')}catch(e){LANG=(navigator.language||'').toLowerCase().startsWith('ko')?'ko':'en'}
+const ORIG=new WeakMap();
+const tr=n=>{const o=ORIG.has(n)?ORIG.get(n):n.nodeValue;const k=o.trim().replace(/\s+/g,' ');const hit=KO[k.toLowerCase()];if(!hit)return;if(!ORIG.has(n))ORIG.set(n,o);const v=LANG==='ko'?o.replace(o.trim(),hit):o;if(n.nodeValue!==v)n.nodeValue=v};
+const walk=r=>{if(r.nodeType===3){tr(r);return}if(r.nodeType!==1||r.closest&&r.closest('.lang'))return;const w=document.createTreeWalker(r,NodeFilter.SHOW_TEXT);let n;while(n=w.nextNode())tr(n)};
+const mark=()=>{document.documentElement.lang=LANG;document.querySelectorAll('.lang span').forEach(s=>s.setAttribute('aria-current',s.dataset.l===LANG))};
+new MutationObserver(ms=>ms.forEach(m=>m.addedNodes.forEach(walk))).observe(document.body,{childList:true,subtree:true});
+document.addEventListener('click',e=>{const b=e.target.closest('.lang');if(!b)return;e.preventDefault();LANG=LANG==='ko'?'en':'ko';try{localStorage.setItem('lang',LANG)}catch(_){}mark();walk(document.body)});
+mark();walk(document.body);
+})();
