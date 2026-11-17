@@ -93,10 +93,10 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 h1.z-name{margin:0;font:inherit;letter-spacing:inherit}
 .ct-about{max-width:300px;margin:0 0 18px;line-height:1.7;color:var(--mute)}
 .ct-about p{margin:0 0 6px}.ct-about .ko{color:var(--ink)}
-.ct-site{max-width:300px;margin-top:22px;padding-top:14px;border-top:1px solid var(--rule);line-height:1.7;color:var(--mute);font-size:12px}
-.ct-site p{margin:0 0 4px}.ct-site .k{color:var(--ink)}
+.ct-note{margin:16px 0 0;color:var(--mute)}
+.ct-site{margin:6px 0 0;color:var(--mute);font-size:11px;opacity:.8}
 .idx-site{padding:18px 32px 28px;border-top:1px solid var(--rule)}
-.idx-site .ct-site{margin:0;padding:0;border:0;max-width:none;text-transform:none}
+.idx-site .ct-site{margin:0}
 .z-contact{top:calc(max(36px,env(safe-area-inset-top,0px)) + 40px);right:max(40px,env(safe-area-inset-right,0px));z-index:5;text-transform:none!important}
 .ct-row{display:grid;grid-template-columns:76px auto 40px;gap:14px;align-items:baseline}
 .ct-row .k{color:var(--mute)}
@@ -221,10 +221,10 @@ h1.z-name{margin:0;font:inherit;letter-spacing:inherit}
   <h1 class="t z-name"><a href="#home">hangyoel ko<span class="sr"> 고한결 — 3D 모델링 · 3D 프린팅 포트폴리오</span></a></h1>
   <nav class="t z-nav" aria-label="Portfolios"><a href="#3d">3d creation</a><a href="#fashion">fashion</a><button id="ctBtn" aria-expanded="false" aria-controls="ctBox">contact</button><div class="lang"><button class="lang-b" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Language / 언어"><svg viewBox="0 0 16 16" width="13" height="13" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.1"><circle cx="8" cy="8" r="6.5"/><ellipse cx="8" cy="8" rx="2.7" ry="6.5"/><path d="M1.5 8h13M2.6 4.5h10.8M2.6 11.5h10.8"/></svg><span class="lang-cur">en</span></button><div class="lang-m" hidden><button type="button" data-l="en">English</button><button type="button" data-l="ko">한국어</button></div></div></nav>
   <div class="t z-contact" id="ctBox" hidden>
-    <div class="ct-about"><p class="ko">3D 모델링 · 3D 프린팅 외주 문의</p><p>3d modeling &amp; printing for artists, brands and fashion — art pieces, accessories, props and clo 3d garments. open to commissions worldwide — korean / english.</p></div>
     <div class="ct-row"><span class="k">mail</span><span class="v">bbgoya0614@gmail.com</span><button class="cp" data-v="bbgoya0614@gmail.com">copy</button></div>
     <div class="ct-row"><span class="k">instagram</span><a class="v" href="https://www.instagram.com/babe_goya_/" target="_blank" rel="noopener">@babe_goya_</a><span></span></div>
-    <div class="ct-site"><p class="k">about this site</p><p>designed and developed by hangyoel ko in 4 days, nov 2026 — point-cloud 3d models on the home page, an interactive 3d viewer with protected model data, english / korean, all built from the portfolio book.</p></div>
+    <p class="ct-note">commissions open — korean / english</p>
+    <p class="ct-site">site designed &amp; built in 4 days, nov 2026</p>
   </div>
   <span class="t z-vert" aria-hidden="true">3d fashion &amp; object</span>
   <div class="z-stage"><canvas id="pc" aria-label="Drag to rotate the model"></canvas></div>
@@ -246,7 +246,7 @@ h1.z-name{margin:0;font:inherit;letter-spacing:inherit}
 <aside id="index" role="dialog" aria-modal="true" aria-label="Index">
   <div class="head"><span class="mono" style="color:var(--mute)">index</span><button class="mono" id="closeIdx">close</button></div>
   <div class="scroll" id="idxList"></div>
-  <div class="idx-site"><div class="ct-site"><p class="k">about this site</p><p>designed and developed by hangyoel ko in 4 days, nov 2026 — point-cloud 3d models on the home page, an interactive 3d viewer with protected model data, english / korean, all built from the portfolio book.</p></div></div>
+  <div class="idx-site"><p class="ct-site">site designed &amp; built in 4 days, nov 2026</p></div>
 </aside>
 
 <script src="site.js"></script>
