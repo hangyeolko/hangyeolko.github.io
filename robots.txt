@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://bbgoya.github.io/sitemap.xml
+Sitemap: https://hangyeolko.github.io/sitemap.xml
