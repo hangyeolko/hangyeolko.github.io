@@ -121,6 +121,7 @@ toc.querySelectorAll('a.row').forEach(a=>{a.onmouseenter=a.onfocus=()=>{const it
 
 /* ----- contact ----- */
 const ctBtn=document.getElementById('ctBtn'),ctBox=document.getElementById('ctBox');
+document.querySelector('.z-credit').onclick=e=>{const b=e.currentTarget;b.classList.toggle('on');b.setAttribute('aria-expanded',b.classList.contains('on'))};
 ctBtn.onclick=()=>{const o=ctBox.hidden;ctBox.hidden=!o;ctBtn.setAttribute('aria-expanded',o)};
 ctBox.querySelectorAll('.cp').forEach(b=>b.onclick=()=>{const done=()=>{b.textContent='copied';setTimeout(()=>b.textContent='copy',1400)};
   try{navigator.clipboard.writeText(b.dataset.v).then(done,()=>{const r=document.createRange();r.selectNodeContents(b.previousElementSibling);const sel=getSelection();sel.removeAllRanges();sel.addRange(r)})}catch(e){}});
@@ -276,7 +277,7 @@ addEventListener('hashchange',route);route();
 (()=>{
 const KO={'3d creation':'3D 작업','fashion':'패션','contact':'연락처','3d fashion & object':'3D · 패션 · 오브제','view project':'프로젝트 보기','index':'목차','close':'닫기','next':'다음','copy':'복사','copied':'복사됨','mail':'메일','instagram':'인스타그램',
 'view in 3d':'3D로 보기','loading 3d model':'3D 모델 불러오는 중','3d view needs webgl2':'이 브라우저에서는 3D 보기를 지원하지 않습니다',
-'commissions open — korean / english':'3D 모델링 · 3D 프린팅 외주 문의 — 한국어 / 영어','site designed & built by hangyeolko in 4 days, nov 2026':'사이트 기획·제작 by hangyeolko — 4일, 2026년 11월','drag to rotate · scroll to zoom':'드래그해서 돌리기 · 스크롤해서 확대',
+'commissions open — korean / english':'3D 모델링 · 3D 프린팅 외주 문의 — 한국어 / 영어','this site · 4 days · design & code by hangyeolko':'이 사이트 · 4일 · 디자인 & 개발 by hangyeolko','site by hangyeolko':'site by hangyeolko','designed & coded in 4 days':'4일 만에 디자인·개발','drag to rotate · scroll to zoom':'드래그해서 돌리기 · 스크롤해서 확대',
 'k-pop artist art pieces':'K-pop 아티스트 아트피스','custom order':'주문 제작','merchandise':'머천다이즈','graduation work':'졸업 작품','apparel vendor':'의류 벤더','designer brand':'디자이너 브랜드','graduation fashion show':'졸업 패션쇼',
 '“made my night” performance film':'“Made My Night” 퍼포먼스 필름','“moon” m/v':'“MOON” 뮤직비디오','brand collaboration':'브랜드 협업','for voguing dancer (juju)':'보깅 댄서 JUJU 의뢰','musician (vp)':'뮤지션 VP 의뢰',
 'personal brand':'개인 브랜드','3d armor':'3D 갑옷','personal studies':'개인 작업','3d garment r&d':'3D 의상 R&D','gown':'드레스','body suit':'바디 슈트',
