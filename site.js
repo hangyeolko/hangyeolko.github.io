@@ -286,8 +286,15 @@ let LANG='en';try{LANG=localStorage.getItem('lang')||((navigator.language||'').t
 const ORIG=new WeakMap();
 const tr=n=>{const o=ORIG.has(n)?ORIG.get(n):n.nodeValue;const k=o.trim().replace(/\s+/g,' ');const hit=KO[k.toLowerCase()];if(!hit)return;if(!ORIG.has(n))ORIG.set(n,o);const v=LANG==='ko'?o.replace(o.trim(),hit):o;if(n.nodeValue!==v)n.nodeValue=v};
 const walk=r=>{if(r.nodeType===3){tr(r);return}if(r.nodeType!==1||r.closest&&r.closest('.lang'))return;const w=document.createTreeWalker(r,NodeFilter.SHOW_TEXT);let n;while(n=w.nextNode())tr(n)};
-const mark=()=>{document.documentElement.lang=LANG;document.querySelectorAll('.lang span').forEach(s=>s.setAttribute('aria-current',s.dataset.l===LANG))};
-new MutationObserver(ms=>ms.forEach(m=>m.addedNodes.forEach(walk))).observe(document.body,{childList:true,subtree:true});
-document.addEventListener('click',e=>{const b=e.target.closest('.lang');if(!b)return;e.preventDefault();LANG=LANG==='ko'?'en':'ko';try{localStorage.setItem('lang',LANG)}catch(_){}mark();walk(document.body)});
-mark();walk(document.body);
+const mark=()=>{document.documentElement.lang=LANG;document.querySelectorAll('.lang-cur').forEach(c=>c.textContent=LANG==='ko'?'kr':'en');document.querySelectorAll('.lang-m button').forEach(b=>b.setAttribute('aria-current',b.dataset.l===LANG))};
+const IRX=/(img\/[df]\d\d-\d\d)(?:-ko)?((?:_t)?\.webp)$/;
+const imgs=r=>{(r.querySelectorAll?r.querySelectorAll('img'):[]).forEach(im=>{const a=im.getAttribute('src')||'';if(IRX.test(a)){const n=a.replace(IRX,LANG==='ko'?'$1-ko$2':'$1$2');if(n!==a)im.setAttribute('src',n)}})};
+new MutationObserver(ms=>ms.forEach(m=>m.addedNodes.forEach(n=>{walk(n);if(n.nodeType===1)imgs(n.tagName==='IMG'?n.parentNode:n)}))).observe(document.body,{childList:true,subtree:true});
+const closeM=()=>document.querySelectorAll('.lang-m').forEach(m=>{m.hidden=true;m.previousElementSibling.setAttribute('aria-expanded','false')});
+document.addEventListener('click',e=>{const b=e.target.closest('.lang-b'),o=e.target.closest('.lang-m button');
+  if(b){const m=b.nextElementSibling,op=m.hidden;closeM();m.hidden=!op;b.setAttribute('aria-expanded',op);return}
+  if(o){LANG=o.dataset.l;try{localStorage.setItem('lang',LANG)}catch(_){}closeM();mark();walk(document.body);imgs(document);return}
+  if(!e.target.closest('.lang'))closeM()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeM()});
+mark();walk(document.body);imgs(document);
 })();
