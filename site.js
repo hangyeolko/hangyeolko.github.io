@@ -102,10 +102,14 @@ function frame(now){
   }
   requestAnimationFrame(frame)}
 requestAnimationFrame(frame);
-pc.addEventListener('pointerdown',e=>{document.querySelector('.z-hint')?.classList.add('off');drag={x:e.clientX,y:e.clientY,t:performance.now()};pc.classList.add('drag');pc.setPointerCapture(e.pointerId);auto=false;clearTimeout(autoT)});
+pc.addEventListener('pointerdown',e=>{zHint.down(e);drag={x:e.clientX,y:e.clientY,t:performance.now()};pc.classList.add('drag');pc.setPointerCapture(e.pointerId);auto=false;clearTimeout(autoT)});
 pc.addEventListener('pointermove',e=>{const r=pc.getBoundingClientRect();mx=e.clientX-r.left;my=e.clientY-r.top;
   if(drag){const dx=e.clientX-drag.x,dy=e.clientY-drag.y;rotY+=dx*.008;rotX=Math.max(-1.4,Math.min(1.4,rotX+dy*.008));vy=dx*.008;vx=dy*.004;drag.x=e.clientX;drag.y=e.clientY}});
-const endDrag=()=>{drag=null;pc.classList.remove('drag')};pc.addEventListener('pointerup',endDrag);pc.addEventListener('pointercancel',endDrag);
+const zHint=(()=>{const h=document.querySelector('.z-hint');let t=0,x0=0,y0=0,real=0;
+  const show=()=>{h&&h.classList.remove('off')};
+  return{down(e){clearTimeout(t);if(h){h.style.animation='none';h.classList.add('off')}x0=e.clientX;y0=e.clientY},
+         up(e){const d=Math.hypot((e.clientX||x0)-x0,(e.clientY||y0)-y0);if(d>50)real++;clearTimeout(t);t=setTimeout(show,real?20000:4000)}}})();
+const endDrag=e=>{if(drag)zHint.up(e);drag=null;pc.classList.remove('drag')};pc.addEventListener('pointerup',endDrag);pc.addEventListener('pointercancel',endDrag);
 pc.addEventListener('pointerleave',()=>{if(!drag){mx=my=-1e4}});
 const MODEL_OF={};MODELS.forEach((m,i)=>{if(!(m.id in MODEL_OF))MODEL_OF[m.id]=i});
 function hoverItem(it){if(it.id in MODEL_OF){auto=false;select(MODEL_OF[it.id],true)}}
