@@ -101,14 +101,19 @@ h1.z-name{margin:0;font:inherit;letter-spacing:inherit}
 .ct-row .cp:hover{color:var(--blood)}
 @media (max-width:900px){
   .z-contact{position:absolute!important;top:58px;right:20px;left:20px;background:var(--paper);padding-block:8px}
-  #home{height:auto;min-height:100%;overflow:visible;padding-bottom:48px}
+  #home{height:auto;min-height:100%;overflow:visible;padding-top:140px;padding-bottom:48px;box-sizing:border-box}
   #home .t{position:static;transform:none}
   .z-name,.z-nav{position:absolute!important;top:28px}
   .z-name{left:20px}.z-nav{right:20px;gap:22px}
   .z-vert,.z-foot{display:none}
-  .z-stage{position:relative;left:auto;top:auto;width:min(80vw,440px);margin:120px auto 0}
+  .z-stage{position:relative;left:auto;top:auto;width:min(80vw,440px);margin:0 auto}
   .z-model{margin:18px 24px 0}
   .z-index{margin:56px 24px 0;gap:40px;flex-wrap:wrap}
+}
+
+@media (max-width:420px){
+  .z-nav{top:56px!important;left:20px;right:auto!important;gap:20px}
+  .z-contact{top:86px!important}
 }
 
 /* ---------- BOOK ---------- */
