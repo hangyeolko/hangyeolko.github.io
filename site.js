@@ -29,10 +29,10 @@ const CATS=[
   {key:'client',col:0,title:'Client work',groups:[
     {name:'K-pop artists',hl:true,items:[['3d-le-sserafim',0,'HYBE'],['3d-babymonster',0,'YG'],['3d-newkin']]},
     {name:'Artists & brands',col:1,items:[['3d-crown-bag'],['3d-vp-pendant'],['3d-aesynctx','Aesynctx collab'],['3d-graduation-show-accessories','Fashion show accessories']]}]},
-  {key:'brand',col:1,title:'Fashion brands',groups:[
-    {name:null,items:[['fashion-aesynctx','Aesynctx','25 S/S'],['fashion-r-d','경승','R&D']]}]},
-  {key:'personal',col:1,title:'Personal work',groups:[
-    {name:null,items:[['3d-fairy-tail-ear-cuff'],['3d-guillotine'],['3d-princess','Graduation collection'],['fashion-clo-3d','CLO 3D studies']]}]}];
+  {key:'personal',col:1,noTitle:true,groups:[
+    {name:'Personal work',items:[['3d-fairy-tail-ear-cuff'],['3d-guillotine'],['3d-princess','Graduation collection'],['fashion-clo-3d','CLO 3D studies']]}]},
+  {key:'brand',col:1,noTitle:true,groups:[
+    {name:'Fashion brands',items:[['fashion-aesynctx','Aesynctx','25 S/S'],['fashion-r-d','경승','R&D']]}]}];
 {const byId={};for(const b of Object.values(BOOKS))b.items.forEach(it=>byId[it.id]=it);
  CATS.forEach(c=>c.groups.forEach(g=>g.items=g.items.map(([id,l,note])=>{const it=byId[id];if(!it)throw new Error('cat '+id);return{it,label:l||it.t,note:note||''}})));}
 const CAT_OF={};CATS.forEach(c=>c.groups.forEach(g=>g.items.forEach(x=>CAT_OF[x.it.id]=c.key)));
@@ -130,10 +130,12 @@ const toc=document.getElementById('toc');
 const rowH=x=>`<a class="row" href="#${x.it.id}" data-id="${x.it.id}">${x.label}${x.note?`<span class="nt">${x.note}</span>`:''}</a>`;
 for(const col of [0,1]){
   const sec=document.createElement('section');
+  let usedH=false;
   sec.innerHTML=CATS.map(c=>{const gs=c.groups.filter(g=>(g.col??c.col)===col);if(!gs.length)return '';
-    const first=(c.groups[0].col??c.col)===col;
-    return (first?`<h2><a href="#${c.groups[0].items[0].it.id}">${c.title.toLowerCase()}</a></h2>`:`<h2 class="sp" aria-hidden="true">&nbsp;</h2>`)+gs.map(g=>
-    `<div class="top${g.hl?' hl':''}">${g.name?`<span class="sl">${g.name}</span>`:''}${g.items.map(rowH).join('')}</div>`).join('')}).join('');
+    const first=(c.groups[0].col??c.col)===col;let h='';
+    if(!usedH){h=first&&!c.noTitle?`<h2><a href="#${c.groups[0].items[0].it.id}">${c.title.toLowerCase()}</a></h2>`:`<h2 class="sp" aria-hidden="true">&nbsp;</h2>`;usedH=true}
+    return h+gs.map(g=>g.hl?`<div class="top hl"><span class="sl">${g.name}</span>${g.items.map(rowH).join('')}</div>`:
+      `<div class="grp"><button class="gl" aria-expanded="false">${g.name}</button><div class="its"><div>${g.items.map(rowH).join('')}</div></div></div>`).join('')}).join('');
   toc.appendChild(sec)}
 toc.querySelectorAll('.gl').forEach(btn=>btn.onclick=()=>{const g=btn.parentElement,o=!g.classList.contains('open');toc.querySelectorAll('.grp.open').forEach(x=>{x.classList.remove('open');x.firstChild.setAttribute('aria-expanded','false')});g.classList.toggle('open',o);btn.setAttribute('aria-expanded',o)});
 toc.querySelectorAll('a.row').forEach(a=>{a.onmouseenter=a.onfocus=()=>{const it=ALL.find(x=>x.id===a.dataset.id);if(it)hoverItem(it)}});
@@ -260,10 +262,15 @@ const idx=document.getElementById('index'),scrim=document.getElementById('scrim'
 const iRow=({it,label,note},cls)=>{const a=document.createElement('a');a.className='iproj'+(cls?' '+cls:'');a.href='#'+it.id;a.dataset.id=it.id;
   a.innerHTML=`<i></i><span>${label}${note?`<em class="nt">${note}</em>`:''}</span><span class="mono">${it.book==='3d'?'3d':'fashion'} p.${range(it)}</span>`;return a};
 for(const c of CATS){
-  const sec=document.createElement('div');sec.className='ibook';
-  sec.innerHTML=`<a class="ibhead" href="#${c.groups[0].items[0].it.id}">${c.title}</a>`;
-  c.groups.forEach(g=>{if(g.name){const h=document.createElement('div');h.className='isl';h.textContent=g.name;sec.appendChild(h)}
-    g.items.forEach(x=>sec.appendChild(iRow(x,g.hl?'itop ihl':'itop')))});
+  const sec=document.createElement('div');sec.className='ibook'+(c.noTitle?' inotitle':'');
+  if(!c.noTitle)sec.innerHTML=`<a class="ibhead" href="#${c.groups[0].items[0].it.id}">${c.title}</a>`;
+  c.groups.forEach(g=>{
+    if(g.hl){const h=document.createElement('div');h.className='isl';h.textContent=g.name;sec.appendChild(h);g.items.forEach(x=>sec.appendChild(iRow(x,'itop ihl')));return}
+    const gb=document.createElement('button');gb.className='igrp';gb.textContent=g.name;gb.setAttribute('aria-expanded','false');
+    const sub=document.createElement('div');sub.className='isub';const inner=document.createElement('div');sub.appendChild(inner);
+    gb.onclick=()=>{const o=!sub.classList.contains('open');sub.classList.toggle('open',o);gb.setAttribute('aria-expanded',o)};
+    g.items.forEach(x=>inner.appendChild(iRow(x)));
+    sec.append(gb,sub)});
   ilist.appendChild(sec);
 }
 function markIdx(){const ck=currentItem&&CAT_OF[currentItem.id];document.querySelectorAll('.tabs a').forEach(a=>a.setAttribute('aria-current',a.dataset.tab===ck));ilist.querySelectorAll('.iproj').forEach(p=>{const on=!!currentItem&&p.dataset.id===currentItem.id;p.setAttribute('aria-current',on);if(on){const sub=p.closest('.isub');if(sub){sub.classList.add('open');sub.previousElementSibling.setAttribute('aria-expanded','true')}}})}
