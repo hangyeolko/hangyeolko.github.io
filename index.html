@@ -89,6 +89,13 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .z-index .row{display:block;font-size:13px;letter-spacing:.02em;line-height:1.9;color:var(--mute);transition:color .2s,transform .3s}
 .z-index .row:first-child{margin-top:2px}.z-index .row:last-child{margin-bottom:8px}
 .z-index .row:hover{color:var(--blood);transform:translateX(4px)}
+.z-index .top{display:flex;flex-direction:column;margin-bottom:2px}
+.z-index .top .row{font-size:14px;line-height:2;color:var(--ink);margin:0!important}
+.iproj.itop{grid-template-columns:minmax(0,1fr) auto;gap:6px;font-size:14px;color:var(--ink);padding-block:6px}
+.iproj.itop i{display:none}.iproj.itop[aria-current="true"]{color:var(--blood)}
+.z-clients{margin:0;top:calc(max(36px,env(safe-area-inset-top,0px)) + 24px);left:max(40px,env(safe-area-inset-left,0px));color:var(--mute);font-size:12px!important;z-index:6}
+.z-clients a{text-transform:none;color:var(--ink);letter-spacing:.04em;transition:color .2s}.z-clients a:hover{color:var(--blood)}
+.z-clients .sep{margin:0 .45em;color:var(--rule)}
 .z-foot{left:50%;bottom:max(40px,env(safe-area-inset-bottom,0px));transform:translateX(-50%);color:var(--mute)}
 .z-name,.z-nav,.z-model,.z-index{z-index:6}
 .z-credit{margin:0;padding:6px 0;left:50%;bottom:max(34px,env(safe-area-inset-bottom,0px));transform:translateX(-50%);white-space:nowrap;color:var(--mute);font-size:11px!important;opacity:.45;z-index:6;background:none;border:0;cursor:pointer;font-family:inherit;transition:opacity .4s}
@@ -123,6 +130,7 @@ h1.z-name{margin:0;font:inherit;letter-spacing:inherit}
   .z-model{margin:18px 24px 0}
   .z-index{margin:56px 24px 0;gap:40px;flex-wrap:wrap}
   .z-credit{display:block;margin:64px auto 0}
+  .z-clients{margin:-14px 20px 4px;line-height:1.7}
 }
 
 @media (max-width:420px){
@@ -230,6 +238,7 @@ h1.z-name{margin:0;font:inherit;letter-spacing:inherit}
 <section id="home" hidden>
   <h1 class="t z-name"><a href="#home">hangyoel ko<span class="sr"> 고한결 — 3D 모델링 · 3D 프린팅 포트폴리오</span></a></h1>
   <nav class="t z-nav" aria-label="Portfolios"><a href="#3d-le-sserafim">client work</a><a href="#3d-fairy-tail-ear-cuff">personal work</a><button id="ctBtn" aria-expanded="false" aria-controls="ctBox">contact</button><div class="lang"><button class="lang-b" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Language / 언어"><svg viewBox="0 0 16 16" width="13" height="13" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.1"><circle cx="8" cy="8" r="6.5"/><ellipse cx="8" cy="8" rx="2.7" ry="6.5"/><path d="M1.5 8h13M2.6 4.5h10.8M2.6 11.5h10.8"/></svg><span class="lang-cur">en</span></button><div class="lang-m" hidden><button type="button" data-l="en">English</button><button type="button" data-l="ko">한국어</button></div></div></nav>
+  <p class="t z-clients"><span class="lbl">worked with</span> <a href="#3d-le-sserafim">LE SSERAFIM</a><span class="sep">/</span><a href="#3d-babymonster">BABYMONSTER</a><span class="sep">/</span><a href="#3d-newkin">NewKin</a></p>
   <div class="t z-contact" id="ctBox" hidden>
     <div class="ct-row"><span class="k">mail</span><span class="v">bbgoya0614@gmail.com</span><button class="cp" data-v="bbgoya0614@gmail.com">copy</button></div>
     <div class="ct-row"><span class="k">instagram</span><a class="v" href="https://www.instagram.com/babe_goya_/" target="_blank" rel="noopener">@babe_goya_</a><span></span></div>

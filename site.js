@@ -27,9 +27,10 @@ for(const [k,b] of Object.entries(BOOKS)){b.key=k;b.items=[];b.owner={};
   b.groups.forEach(g=>g.items.forEach(it=>{it.id=k+'-'+slug(it.t);it.book=k;b.items.push(it);it.s.forEach(s=>b.owner[s]=it);}));}
 const CATS=[
   {key:'client',title:'Client work',groups:[
-    {name:'K-pop artists',items:[['3d-le-sserafim'],['3d-babymonster'],['3d-newkin']]},
-    {name:'Artists & brands',items:[['3d-crown-bag'],['3d-vp-pendant'],['3d-aesynctx','Aesynctx collab'],['3d-graduation-show-accessories','Show accessories']]},
-    {name:'Fashion industry',items:[['fashion-aesynctx','Aesynctx 25 S/S'],['fashion-r-d']]}]},
+    {name:null,items:[['3d-le-sserafim'],['3d-babymonster'],['3d-newkin']]},
+    {name:'Artists & brands',items:[['3d-crown-bag'],['3d-vp-pendant'],['3d-aesynctx','Aesynctx collab'],['3d-graduation-show-accessories','Show accessories']]}]},
+  {key:'inhouse',title:'Experience',groups:[
+    {name:null,items:[['fashion-aesynctx','Aesynctx 25 S/S'],['fashion-r-d']]}]},
   {key:'personal',title:'Personal work',groups:[
     {name:'Personal brand',items:[['3d-fairy-tail-ear-cuff'],['3d-guillotine']]},
     {name:'Graduation collection',items:[['3d-princess','Princess · armor'],['fashion-princess','Princess · gown'],['3d-knight','Knight · armor'],['fashion-knight','Knight · body suit']]},
@@ -130,7 +131,7 @@ function hoverItem(it){if(it.id in MODEL_OF){auto=false;select(MODEL_OF[it.id],t
 const toc=document.getElementById('toc');
 for(const c of CATS){
   const sec=document.createElement('section');
-  sec.innerHTML=`<h2><a href="#${c.groups[0].items[0].it.id}">${c.title.toLowerCase()}</a></h2>`+c.groups.map(g=>`<div class="grp"><button class="gl" aria-expanded="false">${g.name}</button><div class="its"><div>${g.items.map(x=>`<a class="row" href="#${x.it.id}" data-id="${x.it.id}">${x.label}</a>`).join('')}</div></div></div>`).join('');
+  sec.innerHTML=`<h2><a href="#${c.groups[0].items[0].it.id}">${c.title.toLowerCase()}</a></h2>`+c.groups.map(g=>g.name===null?`<div class="top">${g.items.map(x=>`<a class="row" href="#${x.it.id}" data-id="${x.it.id}">${x.label}</a>`).join('')}</div>`:`<div class="grp"><button class="gl" aria-expanded="false">${g.name}</button><div class="its"><div>${g.items.map(x=>`<a class="row" href="#${x.it.id}" data-id="${x.it.id}">${x.label}</a>`).join('')}</div></div></div>`).join('');
   toc.appendChild(sec)}
 toc.querySelectorAll('.gl').forEach(btn=>btn.onclick=()=>{const g=btn.parentElement,o=!g.classList.contains('open');toc.querySelectorAll('.grp.open').forEach(x=>{x.classList.remove('open');x.firstChild.setAttribute('aria-expanded','false')});g.classList.toggle('open',o);btn.setAttribute('aria-expanded',o)});
 toc.querySelectorAll('a.row').forEach(a=>{a.onmouseenter=a.onfocus=()=>{const it=ALL.find(x=>x.id===a.dataset.id);if(it)hoverItem(it)}});
@@ -257,7 +258,9 @@ const idx=document.getElementById('index'),scrim=document.getElementById('scrim'
 for(const c of CATS){
   const sec=document.createElement('div');sec.className='ibook';
   sec.innerHTML=`<a class="ibhead" href="#${c.groups[0].items[0].it.id}">${c.title}</a>`;
-  c.groups.forEach(g=>{const gb=document.createElement('button');gb.className='igrp';gb.textContent=g.name;gb.setAttribute('aria-expanded','false');
+  c.groups.forEach(g=>{if(g.name===null){g.items.forEach(({it,label})=>{const a=document.createElement('a');a.className='iproj itop';a.href='#'+it.id;a.dataset.id=it.id;
+      a.innerHTML=`<i></i><span>${label}</span><span class="mono">${it.book==='3d'?'3d':'fashion'} p.${range(it)}</span>`;sec.appendChild(a)});return}
+    const gb=document.createElement('button');gb.className='igrp';gb.textContent=g.name;gb.setAttribute('aria-expanded','false');
     const sub=document.createElement('div');sub.className='isub';const inner=document.createElement('div');sub.appendChild(inner);
     gb.onclick=()=>{const o=!sub.classList.contains('open');sub.classList.toggle('open',o);gb.setAttribute('aria-expanded',o)};
     g.items.forEach(({it,label})=>{const a=document.createElement('a');a.className='iproj';a.href='#'+it.id;a.dataset.id=it.id;
@@ -265,7 +268,7 @@ for(const c of CATS){
     sec.append(gb,sub)});
   ilist.appendChild(sec);
 }
-function markIdx(){const ck=currentItem&&CAT_OF[currentItem.id];document.querySelectorAll('.tabs a').forEach(a=>a.setAttribute('aria-current',a.dataset.tab===ck));ilist.querySelectorAll('.iproj').forEach(p=>{const on=!!currentItem&&p.dataset.id===currentItem.id;p.setAttribute('aria-current',on);if(on){const sub=p.closest('.isub');sub.classList.add('open');sub.previousElementSibling.setAttribute('aria-expanded','true')}})}
+function markIdx(){const ck=currentItem&&CAT_OF[currentItem.id];document.querySelectorAll('.tabs a').forEach(a=>a.setAttribute('aria-current',a.dataset.tab===ck));ilist.querySelectorAll('.iproj').forEach(p=>{const on=!!currentItem&&p.dataset.id===currentItem.id;p.setAttribute('aria-current',on);if(on){const sub=p.closest('.isub');if(sub){sub.classList.add('open');sub.previousElementSibling.setAttribute('aria-expanded','true')}}})}
 function openIdx(){markIdx();idx.classList.add('on');scrim.classList.add('on');document.getElementById('closeIdx').focus();
   const c=ilist.querySelector('[aria-current="true"]');if(c)c.scrollIntoView({block:'center'})}
 function closeIdx(){idx.classList.remove('on');scrim.classList.remove('on')}
@@ -292,7 +295,7 @@ addEventListener('hashchange',route);route();
 (()=>{
 const KO={'3d creation':'3D 작업','fashion':'패션','contact':'연락처','3d fashion & object':'3D · 패션 · 오브제','view project':'프로젝트 보기','index':'목차','close':'닫기','next':'다음','copy':'복사','copied':'복사됨','mail':'메일','instagram':'인스타그램',
 'view in 3d':'3D로 보기','loading 3d model':'3D 모델 불러오는 중','3d view needs webgl2':'이 브라우저에서는 3D 보기를 지원하지 않습니다',
-'commissions open — korean / english':'3D 모델링 · 3D 프린팅 외주 문의 — 한국어 / 영어','self-built website · designed & coded in 4 days':'자체 제작 웹사이트 · 4일 만에 디자인·개발','self-built website':'자체 제작 웹사이트','designed & coded in 4 days':'4일 만에 디자인·개발','drag to rotate':'드래그해서 돌려보기','client work':'외주 작업','personal work':'개인 작업','k-pop artists':'K-pop 아티스트','artists & brands':'아티스트 · 브랜드','fashion industry':'패션 업계','graduation collection':'졸업 컬렉션','clo 3d studies':'CLO 3D 스터디','show accessories':'쇼 액세서리','princess · armor':'Princess · 갑옷','princess · gown':'Princess · 드레스','knight · armor':'Knight · 갑옷','knight · body suit':'Knight · 바디수트','drag to rotate · scroll to zoom':'드래그해서 돌리기 · 스크롤해서 확대',
+'commissions open — korean / english':'3D 모델링 · 3D 프린팅 외주 문의 — 한국어 / 영어','self-built website · designed & coded in 4 days':'자체 제작 웹사이트 · 4일 만에 디자인·개발','self-built website':'자체 제작 웹사이트','designed & coded in 4 days':'4일 만에 디자인·개발','drag to rotate':'드래그해서 돌려보기','client work':'외주 작업','personal work':'개인 작업','k-pop artists':'K-pop 아티스트','artists & brands':'아티스트 · 브랜드','fashion industry':'패션 업계','graduation collection':'졸업 컬렉션','clo 3d studies':'CLO 3D 스터디','experience':'경력','worked with':'함께한 아티스트','show accessories':'쇼 액세서리','princess · armor':'Princess · 갑옷','princess · gown':'Princess · 드레스','knight · armor':'Knight · 갑옷','knight · body suit':'Knight · 바디수트','drag to rotate · scroll to zoom':'드래그해서 돌리기 · 스크롤해서 확대',
 'k-pop artist art pieces':'K-pop 아티스트 아트피스','custom order':'주문 제작','merchandise':'머천다이즈','graduation work':'졸업 작품','apparel vendor':'의류 벤더','designer brand':'디자이너 브랜드','graduation fashion show':'졸업 패션쇼',
 '“made my night” performance film':'“Made My Night” 퍼포먼스 필름','“moon” m/v':'“MOON” 뮤직비디오','brand collaboration':'브랜드 협업','for voguing dancer (juju)':'보깅 댄서 JUJU 의뢰','musician (vp)':'뮤지션 VP 의뢰',
 'personal brand':'개인 브랜드','3d armor':'3D 갑옷','personal studies':'개인 작업','3d garment r&d':'3D 의상 R&D','gown':'드레스','body suit':'바디 슈트',
