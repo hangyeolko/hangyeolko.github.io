@@ -150,10 +150,13 @@ h1.z-name{margin:0;font:inherit;letter-spacing:inherit}
   .z-credit{display:block;margin:64px auto 0}
   .z-clients{margin:-14px 20px 4px;line-height:1.7}
   .z-clients .lbl{display:block}
-  .z-index h2.sp{display:none}
-  .z-index section+section{margin-top:-26px}
+
 }
 
+@media (max-width:640px){
+  .z-index{flex-direction:column;gap:12px}
+  .z-index h2.sp{display:none}
+}
 @media (max-width:420px){
   .z-nav{top:56px!important;left:20px;right:auto!important;gap:20px}
   .z-contact{top:86px!important}
