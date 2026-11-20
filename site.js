@@ -32,7 +32,7 @@ const CATS=[
   {key:'personal',col:1,noTitle:true,groups:[
     {name:'Personal work',items:[['3d-fairy-tail-ear-cuff'],['3d-guillotine'],['3d-princess','Graduation collection'],['fashion-clo-3d','CLO 3D studies']]}]},
   {key:'brand',col:1,noTitle:true,groups:[
-    {name:'Fashion brands',items:[['fashion-aesynctx','Aesynctx','25 S/S'],['fashion-r-d','경승','R&D']]}]}];
+    {name:'Fashion / R&D',items:[['fashion-aesynctx','Aesynctx','25 S/S'],['fashion-r-d','경승','R&D']]}]}];
 {const byId={};for(const b of Object.values(BOOKS))b.items.forEach(it=>byId[it.id]=it);
  CATS.forEach(c=>c.groups.forEach(g=>g.items=g.items.map(([id,l,note])=>{const it=byId[id];if(!it)throw new Error('cat '+id);return{it,label:l||it.t,note:note||''}})));}
 const CAT_OF={};CATS.forEach(c=>c.groups.forEach(g=>g.items.forEach(x=>CAT_OF[x.it.id]=c.key)));
@@ -42,11 +42,11 @@ const range=it=>it.s[0].split('-')[0]+'–'+it.s[it.s.length-1].split('-')[1];
 const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /* ----- point cloud viewer ----- */
-const MODELS=[
- {k:'vp',name:'VP Pendant',fr:'for VP',id:'3d-vp-pendant',f:.95},
- {k:'skull7',name:'Motorcycle Ornament',fr:'for BABYMONSTER',id:'3d-babymonster',f:.55},
- {k:'headset',name:'Headset',fr:'for LE SSERAFIM',id:'3d-le-sserafim',f:.9},
- {k:'ec',name:'Fairy Tail Ear Cuff',fr:'Personal brand',id:'3d-fairy-tail-ear-cuff',f:1}];
+const MODELS=[ /* fi = order inside models.txt; array order = order shown on home */
+ {k:'headset',fi:2,name:'Headset',fr:'for LE SSERAFIM',id:'3d-le-sserafim',f:.9},
+ {k:'skull7',fi:1,name:'Motorcycle Ornament',fr:'for BABYMONSTER',id:'3d-babymonster',f:.55},
+ {k:'ec',fi:3,name:'Fairy Tail Ear Cuff',fr:'Personal brand',id:'3d-fairy-tail-ear-cuff',f:1},
+ {k:'vp',fi:0,name:'VP Pendant',fr:'for VP',id:'3d-vp-pendant',f:.95}];
 const ALL=Object.values(BOOKS).flatMap(b=>b.items);
 const NP=50000,pos=new Float32Array(NP*3),nor=new Float32Array(NP*3),fromP=new Float32Array(NP*3),fromN=new Float32Array(NP*3);
 const ox_=new Float32Array(NP),oy_=new Float32Array(NP),vx_=new Float32Array(NP),vy_=new Float32Array(NP),ph=new Float32Array(NP),ph2=new Float32Array(NP),kt=new Float32Array(NP).fill(9);for(let i=0;i<NP;i++){ph[i]=Math.random();ph2[i]=Math.random()}let lastNow=0,cvx=0,cvy=0,pmx2=-1e4,pmy2=-1e4;
@@ -55,9 +55,8 @@ let swayBase=0,cm=-1,mt0=-1,MDUR=RM?1:1700,rotY=0,rotX=-.1,vy=0,vx=0,drag=null,m
 function pcSize(){DPR=Math.min(devicePixelRatio||1,2);W=pc.width=Math.round(pc.clientWidth*DPR);H=pc.height=Math.round(pc.clientHeight*DPR)}
 new ResizeObserver(pcSize).observe(pc);
 fetch('models.txt').then(r=>r.text()).then(t=>{const bs=atob(t.trim()),buf=new ArrayBuffer(bs.length),u8=new Uint8Array(buf);for(let i=0;i<bs.length;i++)u8[i]=bs.charCodeAt(i);
-  let o=0;MODELS.forEach(m=>{m.p=new Float32Array(NP*3);m.n=new Float32Array(NP*3);const a=new Int16Array(buf,o,NP*3);o+=NP*6;const n=new Int8Array(buf,o,NP*3);o+=NP*3;
+  let o=0;[...MODELS].sort((a,b)=>a.fi-b.fi).forEach(m=>{m.p=new Float32Array(NP*3);m.n=new Float32Array(NP*3);const a=new Int16Array(buf,o,NP*3);o+=NP*6;const n=new Int8Array(buf,o,NP*3);o+=NP*3;
     for(let i=0;i<NP*3;i++){m.p[i]=a[i]/32000;m.n[i]=n[i]/127}});
-  [MODELS[0],MODELS[3]]=[MODELS[3],MODELS[0]];
   ready=true;pos.set(MODELS[0].p);nor.set(MODELS[0].n);select(0,false);
   if(!RM){for(let i=0;i<NP*3;i++)fromP[i]=(Math.random()-.5)*2.6;fromN.set(MODELS[0].n);fFrom=MODELS[0].f;mt0=performance.now()}}).catch(()=>{});
 const spec=document.getElementById('spec');
@@ -300,7 +299,7 @@ addEventListener('hashchange',route);route();
 (()=>{
 const KO={'3d creation':'3D 작업','fashion':'패션','contact':'연락처','3d fashion & object':'3D · 패션 · 오브제','view project':'프로젝트 보기','index':'목차','close':'닫기','next':'다음','copy':'복사','copied':'복사됨','mail':'메일','instagram':'인스타그램',
 'view in 3d':'3D로 보기','loading 3d model':'3D 모델 불러오는 중','3d view needs webgl2':'이 브라우저에서는 3D 보기를 지원하지 않습니다',
-'commissions open — korean / english':'3D 모델링 · 3D 프린팅 외주 문의 — 한국어 / 영어','self-built website · designed & coded in 4 days':'자체 제작 웹사이트 · 4일 만에 디자인·개발','self-built website':'자체 제작 웹사이트','designed & coded in 4 days':'4일 만에 디자인·개발','drag to rotate':'드래그해서 돌려보기','client work':'외주 작업','personal work':'개인 작업','k-pop artists':'K-pop 아티스트','artists & brands':'아티스트 · 브랜드','fashion industry':'패션 업계','graduation collection':'졸업 컬렉션','clo 3d studies':'CLO 3D 스터디','fashion brands':'패션 브랜드','graduation':'졸업 작품','garments':'의상','worked with':'함께한 아티스트','show accessories':'쇼 액세서리','fashion show accessories':'패션쇼 액세서리','princess · armor':'Princess · 갑옷','princess · gown':'Princess · 드레스','knight · armor':'Knight · 갑옷','knight · body suit':'Knight · 바디수트','drag to rotate · scroll to zoom':'드래그해서 돌리기 · 스크롤해서 확대',
+'commissions open — korean / english':'3D 모델링 · 3D 프린팅 외주 문의 — 한국어 / 영어','self-built website · designed & coded in 4 days':'자체 제작 웹사이트 · 4일 만에 디자인·개발','self-built website':'자체 제작 웹사이트','designed & coded in 4 days':'4일 만에 디자인·개발','drag to rotate':'드래그해서 돌려보기','client work':'외주 작업','personal work':'개인 작업','k-pop artists':'K-pop 아티스트','artists & brands':'아티스트 · 브랜드','fashion industry':'패션 업계','graduation collection':'졸업 컬렉션','clo 3d studies':'CLO 3D 스터디','fashion brands':'패션 브랜드','fashion / r&d':'패션 / R&D','graduation':'졸업 작품','garments':'의상','worked with':'함께한 아티스트','show accessories':'쇼 액세서리','fashion show accessories':'패션쇼 액세서리','princess · armor':'Princess · 갑옷','princess · gown':'Princess · 드레스','knight · armor':'Knight · 갑옷','knight · body suit':'Knight · 바디수트','drag to rotate · scroll to zoom':'드래그해서 돌리기 · 스크롤해서 확대',
 'k-pop artist art pieces':'K-pop 아티스트 아트피스','custom order':'주문 제작','merchandise':'머천다이즈','graduation work':'졸업 작품','apparel vendor':'의류 벤더','designer brand':'디자이너 브랜드','graduation fashion show':'졸업 패션쇼',
 '“made my night” performance film':'“Made My Night” 퍼포먼스 필름','“moon” m/v':'“MOON” 뮤직비디오','brand collaboration':'브랜드 협업','for voguing dancer (juju)':'보깅 댄서 JUJU 의뢰','musician (vp)':'뮤지션 VP 의뢰',
 'personal brand':'개인 브랜드','3d armor':'3D 갑옷','personal studies':'개인 작업','3d garment r&d':'3D 의상 R&D','gown':'드레스','body suit':'바디 슈트',
