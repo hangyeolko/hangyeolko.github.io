@@ -32,7 +32,7 @@ const CATS=[
   {key:'brand',col:1,title:'Fashion brands',groups:[
     {name:null,items:[['fashion-aesynctx','Aesynctx','25 S/S'],['fashion-r-d','경승','R&D']]}]},
   {key:'personal',col:1,title:'Personal work',groups:[
-    {name:null,items:[['3d-fairy-tail-ear-cuff'],['3d-guillotine'],['3d-princess','Graduation','3D armor'],['fashion-princess','Graduation','garments'],['fashion-clo-3d','CLO 3D studies']]}]}];
+    {name:null,items:[['3d-fairy-tail-ear-cuff'],['3d-guillotine'],['3d-princess','Graduation collection'],['fashion-clo-3d','CLO 3D studies']]}]}];
 {const byId={};for(const b of Object.values(BOOKS))b.items.forEach(it=>byId[it.id]=it);
  CATS.forEach(c=>c.groups.forEach(g=>g.items=g.items.map(([id,l,note])=>{const it=byId[id];if(!it)throw new Error('cat '+id);return{it,label:l||it.t,note:note||''}})));}
 const CAT_OF={};CATS.forEach(c=>c.groups.forEach(g=>g.items.forEach(x=>CAT_OF[x.it.id]=c.key)));
