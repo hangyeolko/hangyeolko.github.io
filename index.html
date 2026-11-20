@@ -91,8 +91,9 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .z-index .row:hover{color:var(--blood);transform:translateX(4px)}
 .z-index .top{display:flex;flex-direction:column;margin-bottom:2px}
 .z-index section h2~h2{margin-top:26px}
+.z-index h2.sp{visibility:hidden}
 .z-index .top+.top{margin-top:10px}
-.z-index .top.hl{padding:2px 0 12px;margin-bottom:4px;border-bottom:1px solid var(--rule)}
+.z-index .top.hl{padding:2px 0 0}
 .z-index .top.hl .row{font-size:17px;line-height:1.7;letter-spacing:.03em;font-weight:500}
 .z-index .top.hl .nt{color:var(--blood);opacity:.75;font-weight:400}
 .z-index .top.hl .sl{color:var(--ink)}
@@ -147,6 +148,8 @@ h1.z-name{margin:0;font:inherit;letter-spacing:inherit}
   .z-credit{display:block;margin:64px auto 0}
   .z-clients{margin:-14px 20px 4px;line-height:1.7}
   .z-clients .lbl{display:block}
+  .z-index h2.sp{display:none}
+  .z-index section+section{margin-top:-26px}
 }
 
 @media (max-width:420px){

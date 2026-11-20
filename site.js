@@ -28,7 +28,7 @@ for(const [k,b] of Object.entries(BOOKS)){b.key=k;b.items=[];b.owner={};
 const CATS=[
   {key:'client',col:0,title:'Client work',groups:[
     {name:'K-pop artists',hl:true,items:[['3d-le-sserafim',0,'HYBE'],['3d-babymonster',0,'YG'],['3d-newkin']]},
-    {name:'Artists & brands',items:[['3d-crown-bag'],['3d-vp-pendant'],['3d-aesynctx','Aesynctx collab'],['3d-graduation-show-accessories','Fashion show accessories']]}]},
+    {name:'Artists & brands',col:1,items:[['3d-crown-bag'],['3d-vp-pendant'],['3d-aesynctx','Aesynctx collab'],['3d-graduation-show-accessories','Fashion show accessories']]}]},
   {key:'brand',col:1,title:'Fashion brands',groups:[
     {name:null,items:[['fashion-aesynctx','Aesynctx','25 S/S'],['fashion-r-d','경승','R&D']]}]},
   {key:'personal',col:1,title:'Personal work',groups:[
@@ -130,8 +130,10 @@ const toc=document.getElementById('toc');
 const rowH=x=>`<a class="row" href="#${x.it.id}" data-id="${x.it.id}">${x.label}${x.note?`<span class="nt">${x.note}</span>`:''}</a>`;
 for(const col of [0,1]){
   const sec=document.createElement('section');
-  sec.innerHTML=CATS.filter(c=>c.col===col).map(c=>`<h2><a href="#${c.groups[0].items[0].it.id}">${c.title.toLowerCase()}</a></h2>`+c.groups.map(g=>
-    `<div class="top${g.hl?' hl':''}">${g.name?`<span class="sl">${g.name}</span>`:''}${g.items.map(rowH).join('')}</div>`).join('')).join('');
+  sec.innerHTML=CATS.map(c=>{const gs=c.groups.filter(g=>(g.col??c.col)===col);if(!gs.length)return '';
+    const first=(c.groups[0].col??c.col)===col;
+    return (first?`<h2><a href="#${c.groups[0].items[0].it.id}">${c.title.toLowerCase()}</a></h2>`:`<h2 class="sp" aria-hidden="true">&nbsp;</h2>`)+gs.map(g=>
+    `<div class="top${g.hl?' hl':''}">${g.name?`<span class="sl">${g.name}</span>`:''}${g.items.map(rowH).join('')}</div>`).join('')}).join('');
   toc.appendChild(sec)}
 toc.querySelectorAll('.gl').forEach(btn=>btn.onclick=()=>{const g=btn.parentElement,o=!g.classList.contains('open');toc.querySelectorAll('.grp.open').forEach(x=>{x.classList.remove('open');x.firstChild.setAttribute('aria-expanded','false')});g.classList.toggle('open',o);btn.setAttribute('aria-expanded',o)});
 toc.querySelectorAll('a.row').forEach(a=>{a.onmouseenter=a.onfocus=()=>{const it=ALL.find(x=>x.id===a.dataset.id);if(it)hoverItem(it)}});
