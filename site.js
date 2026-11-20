@@ -26,13 +26,13 @@ const slug=s=>s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||'
 for(const [k,b] of Object.entries(BOOKS)){b.key=k;b.items=[];b.owner={};
   b.groups.forEach(g=>g.items.forEach(it=>{it.id=k+'-'+slug(it.t);it.book=k;b.items.push(it);it.s.forEach(s=>b.owner[s]=it);}));}
 const CATS=[
-  {key:'client',col:0,title:'Client work',groups:[
+  {key:'client',col:0,title:'Professional work',groups:[
     {name:'K-pop artists',hl:true,items:[['3d-le-sserafim',0,'HYBE'],['3d-babymonster',0,'YG'],['3d-newkin']]},
-    {name:'Artists & brands',items:[['3d-crown-bag'],['3d-vp-pendant'],['3d-aesynctx','Aesynctx collab'],['3d-graduation-show-accessories','Fashion show accessories']]}]},
-  {key:'personal',col:1,title:'Other work',groups:[
-    {name:'Personal work',items:[['3d-fairy-tail-ear-cuff'],['3d-guillotine'],['3d-princess','Graduation collection'],['fashion-clo-3d','CLO 3D studies']]}]},
-  {key:'brand',col:1,noTitle:true,groups:[
-    {name:'Fashion / R&D',items:[['fashion-aesynctx','Aesynctx','25 S/S'],['fashion-r-d','경승','R&D']]}]}];
+    {name:'Artists & brands',items:[['3d-crown-bag'],['3d-vp-pendant'],['3d-aesynctx','Aesynctx collab'],['3d-graduation-show-accessories','Fashion show accessories']]},
+    {name:'Fashion / R&D',items:[['fashion-aesynctx','Aesynctx','25 S/S'],['fashion-r-d','경승','R&D']]}]},
+  {key:'personal',col:1,title:'Personal work',groups:[
+    {name:'Personal brand',items:[['3d-fairy-tail-ear-cuff'],['3d-guillotine']]},
+    {name:'Graduation & studies',items:[['3d-princess','Graduation collection'],['fashion-clo-3d','CLO 3D studies']]}]}];
 {const byId={};for(const b of Object.values(BOOKS))b.items.forEach(it=>byId[it.id]=it);
  CATS.forEach(c=>c.groups.forEach(g=>g.items=g.items.map(([id,l,note])=>{const it=byId[id];if(!it)throw new Error('cat '+id);return{it,label:l||it.t,note:note||''}})));}
 const CAT_OF={};CATS.forEach(c=>c.groups.forEach(g=>g.items.forEach(x=>CAT_OF[x.it.id]=c.key)));
@@ -299,7 +299,7 @@ addEventListener('hashchange',route);route();
 (()=>{
 const KO={'3d creation':'3D 작업','fashion':'패션','contact':'연락처','3d fashion & object':'3D · 패션 · 오브제','view project':'프로젝트 보기','index':'목차','close':'닫기','next':'다음','copy':'복사','copied':'복사됨','mail':'메일','instagram':'인스타그램',
 'view in 3d':'3D로 보기','watch video':'영상 보기','loading 3d model':'3D 모델 불러오는 중','3d view needs webgl2':'이 브라우저에서는 3D 보기를 지원하지 않습니다',
-'commissions open — korean / english':'3D 모델링 · 3D 프린팅 외주 문의 — 한국어 / 영어','self-built website · designed & coded in 4 days':'자체 제작 웹사이트 · 4일 만에 디자인·개발','self-built website':'자체 제작 웹사이트','designed & coded in 4 days':'4일 만에 디자인·개발','drag to rotate':'드래그해서 돌려보기','client work':'외주 작업','personal work':'개인 작업','k-pop artists':'K-pop 아티스트','artists & brands':'아티스트 · 브랜드','fashion industry':'패션 업계','graduation collection':'졸업 컬렉션','clo 3d studies':'CLO 3D 스터디','fashion brands':'패션 브랜드','fashion / r&d':'패션 / R&D','other work':'그 외 작업','graduation':'졸업 작품','garments':'의상','worked with':'함께한 아티스트','show accessories':'쇼 액세서리','fashion show accessories':'패션쇼 액세서리','princess · armor':'Princess · 갑옷','princess · gown':'Princess · 드레스','knight · armor':'Knight · 갑옷','knight · body suit':'Knight · 바디수트','drag to rotate · scroll to zoom':'드래그해서 돌리기 · 스크롤해서 확대',
+'commissions open — korean / english':'3D 모델링 · 3D 프린팅 외주 문의 — 한국어 / 영어','self-built website · designed & coded in 4 days':'자체 제작 웹사이트 · 4일 만에 디자인·개발','self-built website':'자체 제작 웹사이트','designed & coded in 4 days':'4일 만에 디자인·개발','drag to rotate':'드래그해서 돌려보기','client work':'외주 작업','personal work':'개인 작업','k-pop artists':'K-pop 아티스트','artists & brands':'아티스트 · 브랜드','fashion industry':'패션 업계','graduation collection':'졸업 컬렉션','clo 3d studies':'CLO 3D 스터디','fashion brands':'패션 브랜드','fashion / r&d':'패션 / R&D','other work':'그 외 작업','professional work':'실무 작업','graduation & studies':'졸업 · 스터디','graduation':'졸업 작품','garments':'의상','worked with':'함께한 아티스트','show accessories':'쇼 액세서리','fashion show accessories':'패션쇼 액세서리','princess · armor':'Princess · 갑옷','princess · gown':'Princess · 드레스','knight · armor':'Knight · 갑옷','knight · body suit':'Knight · 바디수트','drag to rotate · scroll to zoom':'드래그해서 돌리기 · 스크롤해서 확대',
 'k-pop artist art pieces':'K-pop 아티스트 아트피스','custom order':'주문 제작','merchandise':'머천다이즈','graduation work':'졸업 작품','apparel vendor':'의류 벤더','designer brand':'디자이너 브랜드','graduation fashion show':'졸업 패션쇼',
 '“made my night” performance film':'“Made My Night” 퍼포먼스 필름','“moon” m/v':'“MOON” 뮤직비디오','brand collaboration':'브랜드 협업','for voguing dancer (juju)':'보깅 댄서 JUJU 의뢰','musician (vp)':'뮤지션 VP 의뢰',
 'personal brand':'개인 브랜드','3d armor':'3D 갑옷','personal studies':'개인 작업','3d garment r&d':'3D 의상 R&D','gown':'드레스','body suit':'바디 슈트',
