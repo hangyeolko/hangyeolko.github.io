@@ -245,7 +245,7 @@ function renderBook(k){
     if(it&&it.s[0]===s)d.id=it.id;
     d.innerHTML=`<img class="pg" src="${img(b,s)}" width="1190" height="842" loading="lazy" decoding="async" alt="${it?it.t+(it.sub?' — '+it.sub:''):''} · hangyoel ko portfolio, pages ${pages(s)}">
       <div class="halves"><div class="half"><img src="${img(b,s)}" loading="lazy" alt="${it?it.t:''} page ${s.split('-')[0]}"></div><div class="half r"><img src="${img(b,s)}" loading="lazy" alt="${it?it.t:''} page ${s.split('-')[1]}"></div></div>
-      <div class="tag mono"><span>${it?it.t:''}</span><span>${pages(s)}</span></div>${(it&&it.m3d&&it.m3d.on.includes(s))||(it&&it.vid&&it.s[0]===s)?`<div class="v3row">${it.vid&&it.s[0]===s?`<a class="vdb" href="${it.vid}" target="_blank" rel="noopener">watch video</a>`:''}${it.m3d&&it.m3d.on.includes(s)?'<button class="v3b" type="button">view in 3d</button>':''}</div>`:''}`;
+      <div class="tag mono"><span>${it?it.t:''}</span><span>${pages(s)}</span></div>${(it&&it.m3d&&it.m3d.on.includes(s))||(it&&it.vid&&it.s[0]===s)?`<div class="v3row">${it.vid&&it.s[0]===s?`<a class="vdb" href="${it.vid}" target="_blank" rel="noopener">watch video</a>`:''}${it.m3d&&it.m3d.on.includes(s)?'<button class="v3b" type="button"><span>view in 3d</span></button>':''}</div>`:''}`;
     const vb=d.querySelector('.v3b');if(vb)vb.onclick=()=>V3D.open(it.m3d);
     d.dataset.p=it?it.id:'';bookEl.appendChild(d)});
   const other=k==='fashion'?'3d':'fashion';
@@ -312,12 +312,16 @@ const walk=r=>{if(r.nodeType===3){tr(r);return}if(r.nodeType!==1||r.closest&&r.c
 const mark=()=>{document.documentElement.lang=LANG;document.querySelectorAll('.lang-cur').forEach(c=>c.textContent=LANG==='ko'?'kr':'en');document.querySelectorAll('.lang-m button').forEach(b=>b.setAttribute('aria-current',b.dataset.l===LANG))};
 const IRX=/(img\/[df]\d\d-\d\d)(?:-ko)?((?:_t)?\.webp)$/;
 const imgs=r=>{(r.querySelectorAll?r.querySelectorAll('img'):[]).forEach(im=>{const a=im.getAttribute('src')||'';if(IRX.test(a)){const n=a.replace(IRX,LANG==='ko'?'$1-ko$2':'$1$2');if(n!==a)im.setAttribute('src',n)}})};
-new MutationObserver(ms=>ms.forEach(m=>m.addedNodes.forEach(n=>{walk(n);if(n.nodeType===1)imgs(n.tagName==='IMG'?n.parentNode:n)}))).observe(document.body,{childList:true,subtree:true});
+const U3=/\b3d\b/i;
+const u3=r=>{const list=[];const ok=n=>n.parentNode&&n.parentNode.nodeType===1&&!n.parentNode.closest('.u3,script,style,title,noscript')&&U3.test(n.nodeValue);
+  if(r.nodeType===3){if(ok(r))list.push(r)}else if(r.nodeType===1){const w=document.createTreeWalker(r,NodeFilter.SHOW_TEXT);let n;while(n=w.nextNode())if(ok(n))list.push(n)}
+  list.forEach(n=>{const f=document.createDocumentFragment();n.nodeValue.split(/(\b3d\b)/i).forEach(t=>{if(!t)return;if(/^3d$/i.test(t)){const sp=document.createElement('span');sp.className='u3';sp.textContent='3D';f.appendChild(sp)}else f.appendChild(document.createTextNode(t))});n.parentNode.replaceChild(f,n)})};
+new MutationObserver(ms=>ms.forEach(m=>m.addedNodes.forEach(n=>{if(n.nodeType===1&&n.classList&&n.classList.contains('u3'))return;walk(n);u3(n);if(n.nodeType===1)imgs(n.tagName==='IMG'?n.parentNode:n)}))).observe(document.body,{childList:true,subtree:true});
 const closeM=()=>document.querySelectorAll('.lang-m').forEach(m=>{m.hidden=true;m.previousElementSibling.setAttribute('aria-expanded','false')});
 document.addEventListener('click',e=>{const b=e.target.closest('.lang-b'),o=e.target.closest('.lang-m button');
   if(b){const m=b.nextElementSibling,op=m.hidden;closeM();m.hidden=!op;b.setAttribute('aria-expanded',op);return}
-  if(o){LANG=o.dataset.l;try{localStorage.setItem('lang',LANG)}catch(_){}closeM();mark();walk(document.body);imgs(document);return}
+  if(o){if(o.dataset.l===LANG){closeM();return}LANG=o.dataset.l;try{localStorage.setItem('lang',LANG)}catch(_){}location.reload();return}
   if(!e.target.closest('.lang'))closeM()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeM()});
-mark();walk(document.body);imgs(document);
+mark();walk(document.body);u3(document.body);imgs(document);
 })();
