@@ -28,7 +28,7 @@ for(const [k,b] of Object.entries(BOOKS)){b.key=k;b.items=[];b.owner={};
 const CATS=[
   {key:'client',col:0,title:'Client work',groups:[
     {name:'K-pop artists',hl:true,items:[['3d-le-sserafim',0,'HYBE'],['3d-babymonster',0,'YG'],['3d-newkin']]},
-    {name:'Artists & brands',col:1,items:[['3d-crown-bag'],['3d-vp-pendant'],['3d-aesynctx','Aesynctx collab'],['3d-graduation-show-accessories','Fashion show accessories']]}]},
+    {name:'Artists & brands',items:[['3d-crown-bag'],['3d-vp-pendant'],['3d-aesynctx','Aesynctx collab'],['3d-graduation-show-accessories','Fashion show accessories']]}]},
   {key:'personal',col:1,noTitle:true,groups:[
     {name:'Personal work',items:[['3d-fairy-tail-ear-cuff'],['3d-guillotine'],['3d-princess','Graduation collection'],['fashion-clo-3d','CLO 3D studies']]}]},
   {key:'brand',col:1,noTitle:true,groups:[
@@ -132,7 +132,7 @@ for(const col of [0,1]){
   let usedH=false;
   sec.innerHTML=CATS.map(c=>{const gs=c.groups.filter(g=>(g.col??c.col)===col);if(!gs.length)return '';
     const first=(c.groups[0].col??c.col)===col;let h='';
-    if(!usedH){h=first&&!c.noTitle?`<h2><a href="#${c.groups[0].items[0].it.id}">${c.title.toLowerCase()}</a></h2>`:`<h2 class="sp" aria-hidden="true">&nbsp;</h2>`;usedH=true}
+    if(!usedH&&first&&!c.noTitle){h=`<h2><a href="#${c.groups[0].items[0].it.id}">${c.title.toLowerCase()}</a></h2>`;usedH=true}
     return h+gs.map(g=>g.hl?`<div class="top hl"><span class="sl">${g.name}</span>${g.items.map(rowH).join('')}</div>`:
       `<div class="grp"><button class="gl" aria-expanded="false">${g.name}</button><div class="its"><div>${g.items.map(rowH).join('')}</div></div></div>`).join('')}).join('');
   toc.appendChild(sec)}
