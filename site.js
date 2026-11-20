@@ -9,9 +9,9 @@ const BOOKS={
   '3d':{title:'3D Creation',pre:'d',spreads:['01-02','03-04','05-06','07-08','09-10','11-12','13-14','15-16','17-18','19-20','21-22','23-24','25-26','27-28','29-30','31-32','33-34','35-36','37-38','39-40','41-42','43-44','45-46'],
     groups:[
       {name:'K-pop artist art pieces',items:[
-        {t:'LE SSERAFIM',s:['01-02','03-04','05-06'],sub:'“Made My Night” performance film'},
-        {t:'BABYMONSTER',s:['07-08','09-10','11-12','13-14'],sub:'“MOON” M/V',h:1},
-        {t:'NewKin',s:['15-16','17-18','19-20'],sub:'LOG IN: ERROR'}]},
+        {t:'LE SSERAFIM',s:['01-02','03-04','05-06'],vid:'https://www.youtube.com/watch?v=8Eo1jGhi28U',sub:'“Made My Night” performance film'},
+        {t:'BABYMONSTER',s:['07-08','09-10','11-12','13-14'],vid:'https://www.youtube.com/watch?v=xXZwZ0DolJc',sub:'“MOON” M/V',h:1},
+        {t:'NewKin',s:['15-16','17-18','19-20'],vid:'https://www.youtube.com/watch?v=nJk3H8rP4AQ',sub:'LOG IN: ERROR'}]},
       {name:'Custom order',items:[
         {t:'Aesynctx',s:['21-22'],sub:'Brand collaboration',h:1},
         {t:'Crown Bag',s:['23-24'],m3d:{on:['23-24'],src:'m_cb.txt',name:'Crown Bag',yaw:.35,pitch:.12},sub:'For voguing dancer (JUJU)'},
@@ -245,7 +245,7 @@ function renderBook(k){
     if(it&&it.s[0]===s)d.id=it.id;
     d.innerHTML=`<img class="pg" src="${img(b,s)}" width="1190" height="842" loading="lazy" decoding="async" alt="${it?it.t+(it.sub?' — '+it.sub:''):''} · hangyoel ko portfolio, pages ${pages(s)}">
       <div class="halves"><div class="half"><img src="${img(b,s)}" loading="lazy" alt="${it?it.t:''} page ${s.split('-')[0]}"></div><div class="half r"><img src="${img(b,s)}" loading="lazy" alt="${it?it.t:''} page ${s.split('-')[1]}"></div></div>
-      <div class="tag mono"><span>${it?it.t:''}</span><span>${pages(s)}</span></div>${it&&it.m3d&&it.m3d.on.includes(s)?'<div class="v3row"><button class="v3b" type="button">view in 3d</button></div>':''}`;
+      <div class="tag mono"><span>${it?it.t:''}</span><span>${pages(s)}</span></div>${(it&&it.m3d&&it.m3d.on.includes(s))||(it&&it.vid&&it.s[0]===s)?`<div class="v3row">${it.vid&&it.s[0]===s?`<a class="vdb" href="${it.vid}" target="_blank" rel="noopener">watch video</a>`:''}${it.m3d&&it.m3d.on.includes(s)?'<button class="v3b" type="button">view in 3d</button>':''}</div>`:''}`;
     const vb=d.querySelector('.v3b');if(vb)vb.onclick=()=>V3D.open(it.m3d);
     d.dataset.p=it?it.id:'';bookEl.appendChild(d)});
   const other=k==='fashion'?'3d':'fashion';
@@ -298,7 +298,7 @@ addEventListener('hashchange',route);route();
 /* ----- language toggle (ui text only; project titles stay as is) ----- */
 (()=>{
 const KO={'3d creation':'3D 작업','fashion':'패션','contact':'연락처','3d fashion & object':'3D · 패션 · 오브제','view project':'프로젝트 보기','index':'목차','close':'닫기','next':'다음','copy':'복사','copied':'복사됨','mail':'메일','instagram':'인스타그램',
-'view in 3d':'3D로 보기','loading 3d model':'3D 모델 불러오는 중','3d view needs webgl2':'이 브라우저에서는 3D 보기를 지원하지 않습니다',
+'view in 3d':'3D로 보기','watch video':'영상 보기','loading 3d model':'3D 모델 불러오는 중','3d view needs webgl2':'이 브라우저에서는 3D 보기를 지원하지 않습니다',
 'commissions open — korean / english':'3D 모델링 · 3D 프린팅 외주 문의 — 한국어 / 영어','self-built website · designed & coded in 4 days':'자체 제작 웹사이트 · 4일 만에 디자인·개발','self-built website':'자체 제작 웹사이트','designed & coded in 4 days':'4일 만에 디자인·개발','drag to rotate':'드래그해서 돌려보기','client work':'외주 작업','personal work':'개인 작업','k-pop artists':'K-pop 아티스트','artists & brands':'아티스트 · 브랜드','fashion industry':'패션 업계','graduation collection':'졸업 컬렉션','clo 3d studies':'CLO 3D 스터디','fashion brands':'패션 브랜드','fashion / r&d':'패션 / R&D','other work':'그 외 작업','graduation':'졸업 작품','garments':'의상','worked with':'함께한 아티스트','show accessories':'쇼 액세서리','fashion show accessories':'패션쇼 액세서리','princess · armor':'Princess · 갑옷','princess · gown':'Princess · 드레스','knight · armor':'Knight · 갑옷','knight · body suit':'Knight · 바디수트','drag to rotate · scroll to zoom':'드래그해서 돌리기 · 스크롤해서 확대',
 'k-pop artist art pieces':'K-pop 아티스트 아트피스','custom order':'주문 제작','merchandise':'머천다이즈','graduation work':'졸업 작품','apparel vendor':'의류 벤더','designer brand':'디자이너 브랜드','graduation fashion show':'졸업 패션쇼',
 '“made my night” performance film':'“Made My Night” 퍼포먼스 필름','“moon” m/v':'“MOON” 뮤직비디오','brand collaboration':'브랜드 협업','for voguing dancer (juju)':'보깅 댄서 JUJU 의뢰','musician (vp)':'뮤지션 VP 의뢰',
